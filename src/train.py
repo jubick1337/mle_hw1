@@ -30,7 +30,6 @@ class SmileClassifier:
         self.hyperparams['n_estimators'] = int(self.hyperparams['n_estimators'])
         self.hyperparams['random_state'] = int(self.hyperparams['random_state'])
         self.hyperparams['max_features'] = self.hyperparams['max_features'][1:-1]
-        # self.logger = logging.Logger(name='logger')
 
     def train_model(self):
         logging.info(f'Model being trained with parameters: {self.hyperparams}')
