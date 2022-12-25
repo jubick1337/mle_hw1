@@ -19,11 +19,8 @@ class SmileClassifier:
             self.config["DATA"]["train"], header=None).dropna()
         self.X_train = self.train_data.drop(2500, axis=1)
         self.y_train = self.train_data[2500].astype(int)
-        self.test_data = pd.read_csv(
-            self.config["DATA"]["test"], header=None).dropna()
-        self.X_test = self.test_data.drop(2500, axis=1)
-        self.y_test = self.test_data[2500].astype(int)
-        self.model_path = os.path.join(os.path.join(os.getcwd(), 'experiments'), 'model.pkl')
+        self.model_path = os.path.join(os.path.join(os.getcwd(), 'experiments'),
+                                       self.config['EXPERIMENT']['model_path'])
         self.hyperparams = dict(self.config["HYPERPARAMS"])
         self.hyperparams['learning_rate'] = float(self.hyperparams['learning_rate'])
         self.hyperparams['max_depth'] = int(self.hyperparams['max_depth'])
