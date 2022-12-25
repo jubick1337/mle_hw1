@@ -28,12 +28,13 @@ class SmileClassifier:
         self.hyperparams['random_state'] = int(self.hyperparams['random_state'])
         self.hyperparams['max_features'] = self.hyperparams['max_features'][1:-1]
 
-    def train_model(self):
+    def train_model(self) -> str:
         logging.info(f'Model being trained with parameters: {self.hyperparams}')
         classifier = GradientBoostingClassifier(**self.hyperparams)
         classifier.fit(self.X_train, self.y_train)
         self.save_model(classifier, self.model_path)
         logging.info(f'Model saved to {self.model_path}')
+        return self.model_path
 
     @staticmethod
     def save_model(classifier, path: str):

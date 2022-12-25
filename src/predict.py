@@ -20,12 +20,14 @@ class Predictor:
     def predict(self, data):
         return self.classifier.predict(data)
 
-    def predict_test_data(self):
+    def predict_test_data(self) -> int:
         test_data = pd.read_csv(
             self.config["DATA"]["test"], header=None).dropna()
         X_test = test_data.drop(2500, axis=1)
         y_test = test_data[2500].astype(int)
-        logging.info(f'Got score of {self.classifier.score(X_test, y_test)}')
+        res = self.classifier.score(X_test, y_test)
+        logging.info(f'Got score of {res}')
+        return res
 
 
 if __name__ == '__main__':
