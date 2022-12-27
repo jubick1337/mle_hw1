@@ -26,13 +26,13 @@ pipeline {
 
         stage('compose') {
             steps {
-                 sh  "docker compose up"
+                 sh  "docker-compose up"
             }
         }
 
         stage('check log'){
             steps{
-                  sh 'docker compose logs'
+                  sh 'docker-compose logs'
             }
         }
 
