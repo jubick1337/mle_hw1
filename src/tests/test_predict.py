@@ -6,7 +6,6 @@ from src.predict import Predictor
 
 class PredictTest(unittest.TestCase):
     def test_prediction(self):
-        os.chdir('../../')
         predictor = Predictor()
         assert predictor.predict_test_data() > 0.5
 
