@@ -27,20 +27,19 @@ pipeline {
         stage('build') {
             steps {
                  sh  "cd mle_hw1 && docker-compose build"
-                }
             }
+        }
 
         stage('check log'){
             steps{
                   sh 'docker-compose logs'
-                }
             }
         }
 
         stage('push container'){
             steps{
                 sh 'docker push jubick/mle_hw1:latest'
-               }
+            }
         }
     }
 
