@@ -1,0 +1,4 @@
+**.ipynb
+.dvc/.cache/**
+.dvc/tmp/**
+notebooks/**

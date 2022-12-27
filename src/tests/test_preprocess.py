@@ -6,7 +6,6 @@ from src.preprocess import DataProcessor
 
 class ProcessorTest(unittest.TestCase):
     def test_data_saving(self):
-        os.chdir('../../')
         data_processor = DataProcessor()
         data_processor.process_data()
         assert os.path.exists(data_processor.train_csv)

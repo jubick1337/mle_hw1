@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    command: bash -c "python src/preprocess.py && python src/train.py && python src/predict.py && python -m unittest src/tests/test_preprocess.py && python -m unittest src/tests/test_train.py && python -m unittest src/tests/test_predict.py"
+    ports:
+      - 8000:8000
+    image: jubick/mle_hw1:latest
