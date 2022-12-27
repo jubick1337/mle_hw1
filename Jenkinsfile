@@ -12,6 +12,11 @@ pipeline {
             }
         }
 
+        stage('a') {
+            steps {
+                 sh  "which docker"
+            }
+        }
         stage ('build'){
             steps{
                 sh 'docker build -f Dockerfile -t mle_hw:latest .'
