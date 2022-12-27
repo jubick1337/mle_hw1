@@ -6,12 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('git clone') {
-            steps {
-                 sh 'git clone -b main https://github.com/jubick1337/mle_hw1.git'
-            }
-        }
-
         stage('check folder') {
             steps {
                 sh 'cd mle_hw1 && ls'
