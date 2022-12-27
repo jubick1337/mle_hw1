@@ -23,7 +23,7 @@ class Predictor:
     def predict_test_data(self) -> int:
         test_data = pd.read_csv(
             self.config["DATA"]["test"], header=None).dropna()
-        X_test = test_data.drop(2500, axis=1)
+        X_test = test_data.drop(2500, axis=1)  # 2500 is 50x50 patch and 2501 is a label
         y_test = test_data[2500].astype(int)
         res = self.classifier.score(X_test, y_test)
         logging.info(f'Got score of {res}')

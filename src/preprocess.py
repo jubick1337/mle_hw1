@@ -27,7 +27,8 @@ class DataProcessor:
         smiling = (smiling + 1) / 2
         smiling = smiling.dropna()
         dataset = []
-        for img_index, label in tqdm.tqdm(zip(smiling.index[:1001], smiling[:1001])):
+        for img_index, label in tqdm.tqdm(
+                zip(smiling.index[:1001], smiling[:1001])):  # We're using only 1000 images due to lack of RAM
             img = np.asarray(Image.open(f'{self.images_dir}{img_index}'))
             dataset.append(np.append(
                 img[img.shape[0] // 2: img.shape[0] // 2 + 50, img.shape[1] // 2: img.shape[1] // 2 + 50, :].mean(

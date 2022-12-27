@@ -5,6 +5,10 @@ pipeline {
         dockerhub = credentials('dockerhub')
     }
 
+    options {
+        disableConcurrentBuilds()
+    }
+
     stages {
         stage('login'){
             steps{
