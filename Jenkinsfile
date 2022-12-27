@@ -26,13 +26,17 @@ pipeline {
 
         stage('compose') {
             steps {
-                 sh  "docker --version"
+                 sh  "docker compose up"
             }
         }
-
+// steps{
+//       withCredentials([string(credentialsId: 'DockerHubPwd', variable: 'dockerpwd')]) {
+//       sh "docker login -u username -p ${dockerpwd}"
+//             }
+//         }
         stage('check log'){
             steps{
-                  sh 'docker-compose logs'
+                  sh 'docker compose logs'
             }
         }
 
