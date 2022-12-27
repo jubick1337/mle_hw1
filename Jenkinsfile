@@ -16,7 +16,6 @@ pipeline {
             }
         }
 
-
         stage ('build'){
             steps{
                 sh 'docker build -f Dockerfile -t mle_hw:latest .'
