@@ -12,9 +12,15 @@ pipeline {
             }
         }
 
-        stage('check'){
+        stage('check 1'){
             steps{
                 sh 'echo $dockerhub_USR'
+            }
+        }
+
+        stage('check 2'){
+            steps{
+                sh 'echo $dockerhub_PSW'
             }
         }
 
