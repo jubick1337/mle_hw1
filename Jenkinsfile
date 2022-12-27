@@ -1,44 +1,39 @@
 pipeline {
-    agent {dockerfile true}
+    agent any
 
     environment {
-        DOCKERHUB_CREDS = credentials('dockerhub')
+        dockerhub = credentials('dockerhub')
     }
 
     stages {
-        stage('git clone') {
-            steps {
-                 sh 'git clone -b main https://github.com/jubick1337/mle_hw1.git'
-            }
-        }
-
-        stage('check folder') {
-            steps {
-                sh 'cd mle_hw1 && ls'
-            }
-        }
-
-        stage('docker auth'){
-            steps {
-                sh 'docker login -u %DOCKERHUB_CREDS_USR% -p %DOCKERHUB_CREDS_PSW%'
-            }
-        }
-
-        stage('build') {
-            steps {
-                 sh  "cd mle_hw1 && docker-compose build"
-            }
-        }
-
-        stage('check log'){
+        stage('login'){
             steps{
-                  sh 'docker-compose logs'
+                  sh 'echo ${dockerhub_PSW} | docker login -u ${dockerhub_USR} --password-stdin'
+            }
+        }
+
+
+        stage ('build'){
+            steps{
+                sh 'docker build -f Dockerfile -t mle_hw:latest .'
+            }
+        }
+
+        stage ('tag'){
+            steps{
+                sh 'docker tag mle_hw jubick/mle_hw'
+            }
+        }
+
+        stage('compose') {
+            steps {
+                 sh  "docker compose up"
             }
         }
 
         stage('push container'){
             steps{
-                sh 'docker push jubick/mle_hw1:latest'
+                sh 'docker push jubick/mle_hw:latest'
             }
         }
     }
