@@ -6,9 +6,9 @@ pipeline {
     }
 
     stages {
-        stage('check folder') {
-            steps {
-                sh 'ls'
+        stage('login'){
+            steps{
+                  sh 'echo ${dockerhub_PSW} | docker login -u ${dockerhub_USR} --password-stdin'
             }
         }
 
@@ -28,12 +28,6 @@ pipeline {
         stage('compose') {
             steps {
                  sh  "docker compose up"
-            }
-        }
-
-        stage('login'){
-            steps{
-                  sh 'echo ${dockerhub_PSW} | docker login -u ${dockerhub_USR} --stdin-password'
             }
         }
 
