@@ -12,24 +12,6 @@ pipeline {
             }
         }
 
-        stage('check 1'){
-            steps{
-                sh 'echo $dockerhub_USR'
-            }
-        }
-
-        stage('check 2'){
-            steps{
-                sh 'echo $dockerhub_PSW'
-            }
-        }
-
-        stage('docker auth'){
-            steps {
-                sh 'echo Sdockerhub_PSW | docker login -u Sdockerhub_USR --password-stdin'
-            }
-        }
-
         stage ('build'){
             steps{
                 sh 'docker build -f Dockerfile -t mle_hw:latest .'
