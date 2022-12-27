@@ -30,14 +30,10 @@ pipeline {
                  sh  "docker compose up"
             }
         }
-// steps{
-//       withCredentials([string(credentialsId: 'DockerHubPwd', variable: 'dockerpwd')]) {
-//       sh "docker login -u username -p ${dockerpwd}"
-//             }
-//         }
-        stage('check log'){
+
+        stage('login'){
             steps{
-                  sh 'docker compose logs'
+                  sh 'echo ${dockerhub_PSW} | docker login -u ${dockerhub_USR} --stdin-password'
             }
         }
 
