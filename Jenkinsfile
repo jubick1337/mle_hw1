@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('check folder') {
             steps {
-                sh 'cd mle_hw1 && ls'
+                sh 'ls'
             }
         }
 
