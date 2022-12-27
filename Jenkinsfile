@@ -1,15 +1,15 @@
 pipeline {
-    agent any
+    agent {dockerfile true}
 
     environment {
         DOCKERHUB_CREDS = credentials('dockerhub')
     }
 
     stages {
-
         stage('git clone') {
             steps {
                  sh 'git clone -b main https://github.com/jubick1337/mle_hw1.git'
+            }
         }
 
         stage('check folder') {
@@ -41,6 +41,7 @@ pipeline {
         stage('push container'){
             steps{
                 sh 'docker push jubick/mle_hw1:latest'
+               }
         }
     }
 
