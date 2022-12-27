@@ -32,7 +32,6 @@ pipeline {
             app.push("latest")
         }
     }
-}
     post {
 		always {
 			sh 'docker logout'
