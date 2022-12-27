@@ -29,7 +29,6 @@ pipeline {
                  sh  "cd mle_hw1 && docker-compose build"
                 }
             }
-        }
 
         stage('check log'){
             steps{
