@@ -12,6 +12,12 @@ pipeline {
             }
         }
 
+        stage('check'){
+            steps{
+                sh 'echo $dockerhub_USR'
+            }
+        }
+
         stage('docker auth'){
             steps {
                 sh 'echo Sdockerhub_PSW | docker login -u Sdockerhub_USR --password-stdin'
