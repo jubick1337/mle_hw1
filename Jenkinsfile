@@ -1,57 +1,38 @@
 pipeline {
     agent any
 
-    environment {
-        dockerhub = credentials('dockerhub')
+    stage('Clone repository') {
+        /* Let's make sure we have the repository cloned to our workspace */
+        checkout scm
     }
 
-    stages {
-        stage('check folder') {
-            steps {
-                sh 'ls'
-            }
-        }
+    stage('Build image') {
+        /* This builds the actual image; synonymous to
+         * docker build on the command line */
 
-        stage('a') {
-            steps {
-                 sh  "which docker"
-            }
-        }
-        stage ('build'){
-            steps{
-                sh 'docker build -f Dockerfile -t mle_hw:latest .'
-            }
-        }
+        app = docker.build("jubick/mle_hw1")
+    }
 
-        stage ('tag'){
-            steps{
-                sh 'docker tag mle_hw jubick/mle_hw'
-            }
-        }
+    stage('Test image') {
+        /* Ideally, we would run a test framework against our image.
+         * For this example, we're using a Volkswagen-type approach ;-) */
 
-        stage('compose') {
-            steps {
-                 sh  "docker compose up"
-            }
-        }
-// steps{
-//       withCredentials([string(credentialsId: 'DockerHubPwd', variable: 'dockerpwd')]) {
-//       sh "docker login -u username -p ${dockerpwd}"
-//             }
-//         }
-        stage('check log'){
-            steps{
-                  sh 'docker compose logs'
-            }
-        }
-
-        stage('push container'){
-            steps{
-                sh 'docker push jubick/mle_hw:latest'
-            }
+        app.inside {
+            sh 'docker compose up'
         }
     }
 
+    stage('Push image') {
+        /* Finally, we'll push the image with two tags:
+         * First, the incremental build number from Jenkins
+         * Second, the 'latest' tag.
+         * Pushing multiple tags is cheap, as all the layers are reused. */
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
+        }
+    }
+}
     post {
 		always {
 			sh 'docker logout'
