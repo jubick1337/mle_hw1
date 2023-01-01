@@ -1,4 +1,6 @@
+import argparse
 import configparser
+import json
 import logging
 import os.path
 import pickle
@@ -29,7 +31,23 @@ class Predictor:
         logging.info(f'Got score of {res}')
         return res
 
+    def func_test(self):
+        tests_path = os.path.join(os.getcwd(), "tests")
+        for test in os.listdir(tests_path):
+            with open(os.path.join(tests_path, test)) as f:
+                data = json.load(f)
+                X = (
+                    pd.json_normalize(data, record_path=['X']))
+                y = pd.json_normalize(data, record_path=['y'])
+                score = self.classifier.score(X, y)
+                print(f'{self.classifier} has {score} score')
+
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--func", action="store_true", help="if specified will run func tests")
+    args = parser.parse_args()
     predictor = Predictor()
     predictor.predict_test_data()
+    if args.func:
+        predictor.func_test()
