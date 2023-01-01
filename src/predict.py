@@ -1,8 +1,11 @@
+import argparse
 import configparser
+import json
 import logging
 import os.path
 import pickle
 
+import numpy as np
 import pandas as pd
 
 logging.basicConfig(level=logging.INFO)
@@ -17,19 +20,44 @@ class Predictor:
                                self.config['EXPERIMENT']['model_path'][1:]), 'rb') as model_file:
             self.classifier = pickle.load(model_file)
 
-    def predict(self, data):
+    def predict(self, data: pd.DataFrame) -> np.ndarray:
+        """
+        Method to predict on any data
+        :param: data: pandas dataframe with features to predict on
+        :return: numpy array with prediction for each sample in data
+        """
         return self.classifier.predict(data)
 
-    def predict_test_data(self) -> int:
+    def predict_test_data(self) -> float:
+        """
+        Method to predict on our test set
+        :return: returns score of model
+        """
         test_data = pd.read_csv(
-            self.config["DATA"]["test"], header=None).dropna()
+            self.config["DATA"]["test"], header=None).dropna()  # to make sure there's no bad rowss
         X_test = test_data.drop(2500, axis=1)  # 2500 is 50x50 patch and 2501 is a label
         y_test = test_data[2500].astype(int)
         res = self.classifier.score(X_test, y_test)
         logging.info(f'Got score of {res}')
         return res
 
+    def func_test(self):
+        tests_path = os.path.join(os.getcwd(), "tests")
+        for test in os.listdir(tests_path):
+            with open(os.path.join(tests_path, test)) as f:
+                data = json.load(f)
+                X = (
+                    pd.json_normalize(data, record_path=['X']))
+                y = pd.json_normalize(data, record_path=['y'])
+                score = self.classifier.score(X, y)
+                print(f'{self.classifier} has {score} score')
+
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--func", action="store_true", help="if specified will run func tests")
+    args = parser.parse_args()
     predictor = Predictor()
     predictor.predict_test_data()
+    if args.func:
+        predictor.func_test()

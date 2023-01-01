@@ -22,13 +22,18 @@ class SmileClassifier:
         self.model_path = os.path.join(os.path.join(os.getcwd(), 'experiments'),
                                        self.config['EXPERIMENT']['model_path'][1:])
         self.hyperparams = dict(self.config["HYPERPARAMS"])
-        self.hyperparams['learning_rate'] = float(self.hyperparams['learning_rate'])
-        self.hyperparams['max_depth'] = int(self.hyperparams['max_depth'])
-        self.hyperparams['n_estimators'] = int(self.hyperparams['n_estimators'])
-        self.hyperparams['random_state'] = int(self.hyperparams['random_state'])
-        self.hyperparams['max_features'] = self.hyperparams['max_features'][1:-1]
+        self.hyperparams['learning_rate'] = float(
+            self.hyperparams['learning_rate'])  # casting hyperparams to needed type
+        self.hyperparams['max_depth'] = int(self.hyperparams['max_depth'])  # casting hyperparams to needed type
+        self.hyperparams['n_estimators'] = int(self.hyperparams['n_estimators'])  # casting hyperparams to needed type
+        self.hyperparams['random_state'] = int(self.hyperparams['random_state'])  # casting hyperparams to needed type
+        self.hyperparams['max_features'] = self.hyperparams['max_features'][1:-1]  # casting hyperparams to needed type
 
     def train_model(self) -> str:
+        """
+        Method to train model for our dataset
+        :return: path to model
+        """
         logging.info(f'Model being trained with parameters: {self.hyperparams}')
         classifier = GradientBoostingClassifier(**self.hyperparams)
         classifier.fit(self.X_train, self.y_train)
@@ -38,6 +43,12 @@ class SmileClassifier:
 
     @staticmethod
     def save_model(classifier, path: str):
+        """
+        Method to dump model into file
+        :param classifier: model to save
+        :param path: path to save to
+        :return:
+        """
         with open(path, 'wb') as f:
             pickle.dump(classifier, f)
 
