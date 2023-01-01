@@ -1,6 +1,7 @@
 import configparser
 import logging
 import os.path
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -22,10 +23,13 @@ class DataProcessor:
         self.test_csv = self.config['DATA']['test']
 
     def process_data(self):
+        """
+        Method to preprocess CelebA dataset
+        """
         df = pd.read_csv(self.raw_data_path, delim_whitespace=True, header=1)
-        smiling = df['Smiling'].dropna()
-        smiling = (smiling + 1) / 2
-        smiling = smiling.dropna()
+        smiling = df['Smiling'].dropna()  # labels
+        smiling = (smiling + 1) / 2  # Normalize labels to 0-1 range
+        smiling = smiling.dropna()  # make sure there's no bda rows
         dataset = []
         for img_index, label in tqdm.tqdm(
                 zip(smiling.index[:1001], smiling[:1001])):  # We're using only 1000 images due to lack of RAM
@@ -38,7 +42,13 @@ class DataProcessor:
         logging.info(f'Saving test data at {self.test_csv}')
         self.save_data(dataset, False)
 
-    def save_data(self, data, is_train: bool):
+    def save_data(self, data: List[np.ndarray], is_train: bool):
+        """
+        Dumps train and test data to CSVs
+        :param data: data to dump
+        :param is_train: to separate train and test sets
+        :return:
+        """
         if is_train:
             with open(self.train_csv, 'w') as f:
                 for d in tqdm.tqdm(data[:900]):
